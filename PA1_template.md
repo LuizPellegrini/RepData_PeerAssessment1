@@ -1,11 +1,4 @@
----
-title: 'Reproducible Research: Peer Assessment 1'
-output:
-  html_document:
-    keep_md: yes
-  pdf_document: default
-  word_document: default
----
+# Reproducible Research: Peer Assessment 1
 ##Introduction
 
 This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. 
@@ -24,7 +17,8 @@ date: The date on which the measurement was taken in YYYY-MM-DD format
 interval: Identifier for the 5-minute interval in which measurement was taken
 
 ## Loading and preprocessing the data
-```{r, echo=TRUE}
+
+```r
 ##      Library(data.table)
 ##      Library(devtools)
       setwd("C:/Users/luiz pellegrini/Documents")
@@ -46,6 +40,8 @@ interval: Identifier for the 5-minute interval in which measurement was taken
           ylab="Number of steps")
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-1-1.png) 
+
 ## What is mean total number of steps taken per day?
 
 The summary file is good to provide a basic overview of this file, showing:
@@ -56,16 +52,40 @@ maximum value,
 mean, and
 average
 
-```{r, echo=TRUE}
+
+```r
       summary(sum_file)
+```
+
+```
+##  act_file_clean.date      Freq      
+##  2012-10-01: 1       Min.   :    0  
+##  2012-10-02: 1       1st Qu.: 6778  
+##  2012-10-03: 1       Median :10395  
+##  2012-10-04: 1       Mean   : 9354  
+##  2012-10-05: 1       3rd Qu.:12811  
+##  2012-10-06: 1       Max.   :21194  
+##  (Other)   :55
 ```
 
 The mean and the median of steps per day does not include any NA value on steps. In a later part of this of this course project we will calculate a new mean replacing all NA values on steps, and after that the mean and median will be compared with this part.
 
 The mean and median are listed bellow:
-```{r, echo=TRUE}
+
+```r
       mean(sum_file$Freq)
+```
+
+```
+## [1] 9354.23
+```
+
+```r
       median(sum_file$Freq)
+```
+
+```
+## [1] 10395
 ```
 ## What is the average daily activity pattern?
 
@@ -73,7 +93,8 @@ To determine the average daily activity pattern is necessary to create a new dat
 
 Probably there are several ways to achieve the same goal using different commands and functions in R, and I chose this command, because it seemed very simple to use.
 
-``` {r, echo=TRUE}
+
+```r
 ## Aggregate number os steps by interval
       sum_file2 <- as.data.frame(xtabs(act_file_clean$steps 
           ~ act_file_clean$interval))
@@ -84,14 +105,21 @@ Probably there are several ways to achieve the same goal using different command
       )      
 ```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
+
 ## Imputing missing values
 
 Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
 Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
-``` {r, echo=TRUE}
+
+```r
       sum(is.na(activity_file$steps))      
+```
+
+```
+## [1] 2304
 ```
 
 Initially I used a strategy of imputing the total average of steps to replace the NA values. The result was not good enough, because due to the huge amount of the NA the new average was very far from the general average, which was still very biased.
@@ -100,7 +128,8 @@ After that I created a table with the daily average and attributed this average 
 
 Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
-``` {r, echo=TRUE}
+
+```r
 ##
 ## fill in average day for NA intervals
 ##
@@ -128,37 +157,93 @@ Make a histogram of the total number of steps taken each day and Calculate and r
 
 Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
-```{r, echo=TRUE}
+
+```r
 plot(sum_file_WONA$act_file_NA.date, sum_file_WONA$Freq, 
      type="h", main="Total steps per day", xlab="Date", 
      ylab="Total number of steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
+
+```r
 summary(sum_file_WONA) 
 ```
 
-Below are the new mean, median and summary information for the file with NA´s replaced by the daily average.
+```
+##    act_file_NA.date      Freq      
+##  2012-10-01: 1      Min.   :    0  
+##  2012-10-02: 1      1st Qu.: 6778  
+##  2012-10-03: 1      Median :10395  
+##  2012-10-04: 1      Mean   : 9357  
+##  2012-10-05: 1      3rd Qu.:12811  
+##  2012-10-06: 1      Max.   :21194  
+##  (Other)   :55
+```
+
+Below are the new mean, median and summary information for the file with NAÂ´s replaced by the daily average.
 
 It is possible to see that the median remains the same and the mean now is very close to the previous one. This happens because we used the daily pattern to fill in the missing values and this provides a very small distortion.
 
-```{r, echo=TRUE}
+
+```r
 summary(sum_file_WONA) 
+```
+
+```
+##    act_file_NA.date      Freq      
+##  2012-10-01: 1      Min.   :    0  
+##  2012-10-02: 1      1st Qu.: 6778  
+##  2012-10-03: 1      Median :10395  
+##  2012-10-04: 1      Mean   : 9357  
+##  2012-10-05: 1      3rd Qu.:12811  
+##  2012-10-06: 1      Max.   :21194  
+##  (Other)   :55
+```
+
+```r
 mean(sum_file_WONA$Freq)
+```
+
+```
+## [1] 9356.883
+```
+
+```r
 median(sum_file_WONA$Freq)
 ```
 
-Here are the differences between mean and medians considering the replacement of NA´s by the daily average
+```
+## [1] 10395
+```
 
-```{r}
+Here are the differences between mean and medians considering the replacement of NAÂ´s by the daily average
+
+
+```r
       mean_diff <- mean(sum_file_WONA$Freq) - mean(sum_file$Freq)
       median_diff <- median(sum_file_WONA$Freq) - median(sum_file$Freq)
       x <- c("Mean difference = ", mean_diff)
       y <- c("Median difference = ", median_diff)
       x
+```
+
+```
+## [1] "Mean difference = " "2.65397313297035"
+```
+
+```r
       y
+```
+
+```
+## [1] "Median difference = " "0"
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r, echo=TRUE}
+
+```r
 ## This step creates a new dataset with the steps aggregated by interval and date
       sum_day_interval <- aggregate(act_file_clean$steps~
         act_file_clean$interval+
@@ -192,3 +277,5 @@ Here are the differences between mean and medians considering the replacement of
         type="h", main="Total steps per weekend", 
         xlab="Interval",ylab="Total number of steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
