@@ -45,12 +45,12 @@ interval: Identifier for the 5-minute interval in which measurement was taken
 ## What is mean total number of steps taken per day?
 
 The summary file is good to provide a basic overview of this file, showing:
-minimum value,
-maximum value,
-1st quartile,
-3st quartile,
-mean, and
-average
+. minimum value,
+. maximum value,
+. 1st quartile,
+. 3st quartile,
+. mean, and
+. average
 
 
 ```r
