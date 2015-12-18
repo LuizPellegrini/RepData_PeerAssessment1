@@ -70,18 +70,10 @@ The summary file is good to provide a basic overview of this file, showing:
 
 The mean and the median of steps per day does not include any NA value on steps. In a later part of this of this course project we will calculate a new mean replacing all NA values on steps, and after that the mean and median will be compared with this part.
 
-The mean and median are listed bellow:
-
-```r
-      mean(sum_file$Freq)
-```
+The mean is 9354.2295082 and median is 10395
 
 ```
 ## [1] 9354.23
-```
-
-```r
-      median(sum_file$Freq)
 ```
 
 ```
