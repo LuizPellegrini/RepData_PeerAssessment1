@@ -70,15 +70,13 @@ The summary file is good to provide a basic overview of this file, showing:
 
 The mean and the median of steps per day does not include any NA value on steps. In a later part of this of this course project we will calculate a new mean replacing all NA values on steps, and after that the mean and median will be compared with this part.
 
-The mean is 9354.2295082 and median is 10395
 
-```
-## [1] 9354.23
-```
 
+```r
+      mean(sum_file$Freq)
+      median(sum_file$Freq)
 ```
-## [1] 10395
-```
+####The mean is 9354.2295082 and median is 10395
 ## What is the average daily activity pattern?
 
 To determine the average daily activity pattern is necessary to create a new dataset aggregating information of total number of steps by interval.
@@ -103,16 +101,13 @@ Probably there are several ways to achieve the same goal using different command
 
 Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
 
-Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
-
 
 ```r
       sum(is.na(activity_file$steps))      
 ```
 
-```
-## [1] 2304
-```
+####There are 2304 missing values in the dataset (i.e. the total number of rows with NAs)
+
 
 Initially I used a strategy of imputing the total average of steps to replace the NA values. The result was not good enough, because due to the huge amount of the NA the new average was very far from the general average, which was still very biased.
 
@@ -180,34 +175,10 @@ It is possible to see that the median remains the same and the mean now is very 
 
 ```r
 summary(sum_file_WONA) 
-```
-
-```
-##    act_file_NA.date      Freq      
-##  2012-10-01: 1      Min.   :    0  
-##  2012-10-02: 1      1st Qu.: 6778  
-##  2012-10-03: 1      Median :10395  
-##  2012-10-04: 1      Mean   : 9357  
-##  2012-10-05: 1      3rd Qu.:12811  
-##  2012-10-06: 1      Max.   :21194  
-##  (Other)   :55
-```
-
-```r
 mean(sum_file_WONA$Freq)
-```
-
-```
-## [1] 9356.883
-```
-
-```r
 median(sum_file_WONA$Freq)
 ```
-
-```
-## [1] 10395
-```
+####The new mean is 9356.8834813 and the new median is 1.0395\times 10^{4}
 
 Here are the differences between mean and medians considering the replacement of NA´s by the daily average
 
@@ -218,19 +189,10 @@ Here are the differences between mean and medians considering the replacement of
       x <- c("Mean difference = ", mean_diff)
       y <- c("Median difference = ", median_diff)
       x
-```
-
-```
-## [1] "Mean difference = " "2.65397313297035"
-```
-
-```r
       y
 ```
+####Mean difference is Mean difference = , 2.65397313297035 and the median difference is Median difference = , 0
 
-```
-## [1] "Median difference = " "0"
-```
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -271,3 +233,12 @@ Here are the differences between mean and medians considering the replacement of
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-10-1.png) 
+.
+
+```r
+      x <- max(dt_weekend$steps)
+      y <- max(dt_weekday$steps)
+```
+###Comparison of maximum number os steps from weekend against weekdays
+
+####The range os steps per weekday is much higher than during the weekdays. Here is the maximum number of steps during weekend 9130 compared with the maximum number of steps during weekend 2450
