@@ -25,22 +25,15 @@ interval: Identifier for the 5-minute interval in which measurement was taken
 
 ## Loading and preprocessing the data
 ```{r, echo=TRUE}
-##      Library(data.table)
-##      Library(devtools)
       setwd("C:/Users/luiz pellegrini/Documents")
       activity_file <- read.csv("activity.csv", header=TRUE, sep=",", 
          na.strings="NA")
-##
 ## Eliminates the NA 
-##
       act_file_clean <- na.omit(activity_file)
 ## summarize total number os steps per day
       sum_file <- as.data.frame(xtabs(act_file_clean$steps ~ 
           act_file_clean$date))
-##      sum_file <- aggregate(act_file_clean$steps~                              ##                                 act_file_clean$date, FUN=sum)
-##
 ## creates the histogram for the total number os steps per day
-##
       plot(sum_file$act_file_clean.date, sum_file$Freq, 
           type="h", main="Total steps per day", xlab="Date", 
           ylab="Number of steps")
@@ -63,12 +56,23 @@ The summary file is good to provide a basic overview of this file, showing:
 The mean and the median of steps per day does not include any NA value on steps. In a later part of this of this course project we will calculate a new mean replacing all NA values on steps, and after that the mean and median will be compared with this part.
 
 
-```{r, echo=TRUE, results='hide'}
+```{r, echo=TRUE, results='hide', warning=FALSE}
+      library(doBy)
       mean(sum_file$Freq)
       median(sum_file$Freq)
+## Function summaryBy from doBy library groups steps by date and additionally
+## calculates the statistical functions like mean and median for each day      
+      sum_mean_median <- summaryBy(act_file_clean$steps ~ 
+      act_file_clean$date, data=act_file_clean,FUN = list(mean, median))
+      names(sum_mean_median) <- c("Date", "Mean", "Median")
 ```
 ####The mean is `r mean(sum_file$Freq)` and median is `r median(sum_file$Freq)`
 ## What is the average daily activity pattern?
+
+####Here is the table with mean and median per each day.
+```{r, echo=TRUE}
+      sum_mean_median 
+```
 
 To determine the average daily activity pattern is necessary to create a new dataset aggregating information of total number of steps by interval.
 
@@ -103,9 +107,7 @@ After that I created a table with the daily average and attributed this average 
 Create a new dataset that is equal to the original dataset but with the missing data filled in.
 
 ``` {r, echo=TRUE}
-##
 ## fill in average day for NA intervals
-##
       act_file_NA <- activity_file 
       act_file_NA$date <- as.Date(act_file_NA$date)       
       agr_day <- aggregate(act_file_NA$step, list(act_file_NA$date), mean)
@@ -113,9 +115,7 @@ Create a new dataset that is equal to the original dataset but with the missing 
       agr_day$x[is.na(agr_day$x)] <- 0
 
 ## calculate the general mean
-##
 ## apply the general mean to NA values
-##
       for(i in 1:17568) {
         dif_days <- act_file_NA$date[i+1] - act_file_NA$date[1] + 1
         dif_days <- as.numeric(dif_days)
@@ -131,10 +131,10 @@ Make a histogram of the total number of steps taken each day and Calculate and r
 Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
 ```{r, echo=TRUE}
-plot(sum_file_WONA$act_file_NA.date, sum_file_WONA$Freq, 
-     type="h", main="Total steps per day", xlab="Date", 
-     ylab="Total number of steps")
-summary(sum_file_WONA) 
+      plot(sum_file_WONA$act_file_NA.date, sum_file_WONA$Freq, 
+          type="h", main="Total steps per day", xlab="Date", 
+          ylab="Total number of steps")
+      summary(sum_file_WONA) 
 ```
 
 Below are the new mean, median and summary information for the file with NA´s replaced by the daily average.
@@ -142,9 +142,9 @@ Below are the new mean, median and summary information for the file with NA´s re
 It is possible to see that the median remains the same and the mean now is very close to the previous one. This happens because we used the daily pattern to fill in the missing values and this provides a very small distortion.
 
 ```{r, echo=TRUE, results='hide'}
-summary(sum_file_WONA) 
-mean(sum_file_WONA$Freq)
-median(sum_file_WONA$Freq)
+      summary(sum_file_WONA) 
+      mean(sum_file_WONA$Freq)
+      median(sum_file_WONA$Freq)
 ```
 ####The new mean is `r mean(sum_file_WONA$Freq)` and the new median is `r median(sum_file_WONA$Freq)`
 
@@ -153,12 +153,8 @@ Here are the differences between mean and medians considering the replacement of
 ```{r, echo=TRUE, results='hide'}
       mean_diff <- mean(sum_file_WONA$Freq) - mean(sum_file$Freq)
       median_diff <- median(sum_file_WONA$Freq) - median(sum_file$Freq)
-      x <- c("Mean difference = ", mean_diff)
-      y <- c("Median difference = ", median_diff)
-      x
-      y
 ```
-####Mean difference is `r x` and the median difference is `r y`
+####Mean difference is `r mean_diff` and the median difference is `r median_diff`
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -166,16 +162,14 @@ Here are the differences between mean and medians considering the replacement of
 ```{r, echo=TRUE, fig.height=10}
 ## This step creates a new dataset with the steps aggregated by interval and date
       sum_day_interval <- aggregate(act_file_clean$steps~
-        act_file_clean$interval+
-        act_file_clean$date, FUN=mean)
+        act_file_clean$interval+act_file_clean$date, FUN=mean)
 ## This step includes a new column on this dataset to determine if the date is
 ## a weekday or a weekend      
       sum_day_interval["weekend"] <- NA
       sum_day_interval$`act_file_clean$date` <- 
         as.Date(sum_day_interval$`act_file_clean$date`)
-## Chron library has functions fo determine if a given date is a weekend.
-## This functions returns a bolean result, TRUE if the is a weekend and FALSE
-## if that given date is a weekday      
+## Chron library has functions fo determine if a given date is a weekend and
+## returns a bolean result, TRUE if the is a weekend and FALSE the other days
       sum_day_interval$weekend = 
         chron::is.weekend(sum_day_interval$`act_file_clean$date`)
 ## This step creates a new file aggregatin steps by interval and weekday fields
@@ -201,7 +195,10 @@ Here are the differences between mean and medians considering the replacement of
 ```{r, echo=TRUE, results='hide'}
       x <- max(dt_weekend$steps)
       y <- max(dt_weekday$steps)
+      xx <- mean(dt_weekend$steps)
+      yy <- mean(dt_weekday$steps)
 ```
 ###Comparison of maximum number os steps from weekend against weekdays
 
-####The maximum number os steps during weekdays is much higher than the number of steps during the weekend. Here is the maximum number of steps during weekdays `r y` compared to the maximum number of steps during weekend `r x`
+#####The maximum number os steps during weekdays is much higher than the number of steps during the weekend. Here is the maximum number of steps during weekdays `r y` compared to the maximum number of steps during weekend `r x`
+#####The other importart element for comparison among activity behavior during weekdays and weekends is the steps mean in these days. Here is the mean for weekdays `r yy` which is much higher than the mean for weekends, which is `r xx`

@@ -8,13 +8,12 @@ activity_file <- read.csv("activity.csv", header=TRUE, sep=",", na.strings="NA")
 act_file_clean <- na.omit(activity_file)
 ## summarize total number os steps per day
 sum_file <-as.data.frame(xtabs(act_file_clean$steps ~ act_file_clean$date, df))
-hist(sum_file$Freq, xlab="Number of steps")
 ##
 ## creates the histogram for the total number os steps per day
 ##
 plot(sum_file$act_file_clean.date, sum_file$Freq, 
-     type="h", main="Total steps per day", xlab="Date", 
-     ylab="Total number of steps")
+     type="o", main="Total steps per day", xlab="Date", 
+     ylab="Number of steps")
 summary(sum_file)
 mean(sum_file$Freq)
 median(sum_file$Freq)
@@ -22,10 +21,11 @@ median(sum_file$Freq)
 ## What is the average daily activity pattern? (QUESTION 2)
 ##
 ## Aggregate number os steps by interval
-sum_file2 <-as.data.frame(xtabs(act_file_clean$steps ~ act_file_clean$interval, df))
+      sum_file2 <- as.data.frame(xtabs(act_file_clean$steps ~ act_file_clean$interval, df))
 ## Creates plot with Number os steps per interval
-plot(sum_file2$act_file_clean.interval, sum_file2$Freq, type="1", xlab="Intervals",
-      ylab="Total number of steps", main="Total number os steps per interval"
+      plot(sum_file2$act_file_clean.interval, sum_file2$Freq, type="1", 
+           xlab="Intervals",ylab="Total number of steps",
+           main="Total number os steps per interval"
       )
 ## Gets the maximum number os steps per day,
 ## finds the row index for this value and displays interval with the max number os steps
