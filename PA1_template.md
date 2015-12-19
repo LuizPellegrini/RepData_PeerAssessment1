@@ -241,4 +241,4 @@ Here are the differences between mean and medians considering the replacement of
 ```
 ###Comparison of maximum number os steps from weekend against weekdays
 
-####The range os steps per weekday is much higher than during the weekdays. Here is the maximum number of steps during weekend 9130 compared with the maximum number of steps during weekend 2450
+####The maximum number os steps during weekdays is much higher than the number of steps during the weekend. Here is the maximum number of steps during weekdays 9130 compared to the maximum number of steps during weekend 2450

@@ -163,7 +163,7 @@ Here are the differences between mean and medians considering the replacement of
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r, echo=TRUE, fig.height=12}
+```{r, echo=TRUE, fig.height=10}
 ## This step creates a new dataset with the steps aggregated by interval and date
       sum_day_interval <- aggregate(act_file_clean$steps~
         act_file_clean$interval+
@@ -204,4 +204,4 @@ Here are the differences between mean and medians considering the replacement of
 ```
 ###Comparison of maximum number os steps from weekend against weekdays
 
-####The range os steps per weekday is much higher than during the weekdays. Here is the maximum number of steps during weekend `r y` compared with the maximum number of steps during weekend `r x`
+####The maximum number os steps during weekdays is much higher than the number of steps during the weekend. Here is the maximum number of steps during weekdays `r y` compared to the maximum number of steps during weekend `r x`
